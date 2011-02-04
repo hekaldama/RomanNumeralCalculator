@@ -4,6 +4,10 @@ require 'minitest/unit'
 
 require 'roman_numeral_calculator'
 
+class RomanNumeralCalculator
+  attr_reader :input
+end
+
 class RomanNumeralCalculatorTest < MiniTest::Unit::TestCase
 
   def test_class_calculate_string_input

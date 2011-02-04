@@ -20,8 +20,6 @@ class RomanNumeralCalculator
     new(input).calculate
   end
 
-  attr_reader :input
-
   def initialize input
     @input = input
   end
@@ -30,15 +28,15 @@ class RomanNumeralCalculator
     raise ArgumentError unless is_roman?
 
     # convert roman to integer
-    if input.to_i == 0
+    if @input.to_i == 0
       total = 0
-      input.each_char do |e|
+      @input.each_char do |e|
         total += translate_roman_char_to_fixnum e
       end
       total
     else
       ROMAN_TO_FIXNUM.values.reverse.each do |i|
-        val = input / i
+        val = @input / i
         next if val == 0
         a = FIXNUM_TO_ROMAN[i] * val
         return a
@@ -47,7 +45,7 @@ class RomanNumeralCalculator
   end
 
   def is_roman?
-    !(input =~ /[^ivxlcdm]/i)
+    !(@input =~ /[^ivxlcdm]/i)
   end
 
   # TODO privitize
