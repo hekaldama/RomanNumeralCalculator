@@ -25,32 +25,47 @@ class RomanNumeralCalculator
   end
 
   def calculate
-    raise ArgumentError unless is_roman?
+    raise ArgumentError unless valid_input?
 
     # convert roman to integer
-    if @input.to_i == 0
-      total = 0
-      @input.each_char do |e|
-        total += translate_roman_char_to_fixnum e
-      end
-      total
+    if @input.is_a? String
+      convert_roman_to_numeric
     else
-      ROMAN_TO_FIXNUM.values.reverse.each do |i|
-        val = @input / i
-        next if val == 0
-        a = FIXNUM_TO_ROMAN[i] * val
-        return a
-      end
+      convert_numeric_to_roman
     end
   end
 
-  def is_roman?
+  private
+
+  def convert_numeric_to_roman
+    ROMAN_TO_FIXNUM.values.reverse.each do |i|
+      val = @input / i
+      next if val == 0
+      a = FIXNUM_TO_ROMAN[i] * val
+      return a
+    end
+  end
+
+  def convert_roman_to_numeric
+    total = 0
+    @input.each_char do |char|
+      total += ROMAN_TO_FIXNUM[char.downcase]
+    end
+    total
+  end
+
+  def valid_input?
     !(@input =~ /[^ivxlcdm]/i)
   end
 
-  # TODO privitize
-  def translate_roman_char_to_fixnum char
-    ROMAN_TO_FIXNUM[char.downcase]
+  def break_number_into_parts
+    output = []
+
+    @input.to_s.reverse.each_char.with_index do |e,i|
+      output << e.to_i * 10**i
+    end
+
+    output.reverse
   end
 
 end

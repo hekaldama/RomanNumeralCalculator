@@ -5,10 +5,16 @@ require 'minitest/unit'
 require 'roman_numeral_calculator'
 
 class RomanNumeralCalculator
+  public :break_number_into_parts
+
   attr_reader :input
 end
 
 class RomanNumeralCalculatorTest < MiniTest::Unit::TestCase
+
+  def setup_instance input
+    @rnc = RomanNumeralCalculator.new input
+  end
 
   def test_class_calculate_string_input
     assert_equal 3,  RomanNumeralCalculator.calculate('III')
@@ -33,9 +39,16 @@ class RomanNumeralCalculatorTest < MiniTest::Unit::TestCase
   end
 
   def test_init
-    input = 123
-    rnc = RomanNumeralCalculator.new input
-    assert_equal input, rnc.input
+    setup_instance 123
+    assert_equal 123, @rnc.input
+  end
+
+  def test_break_number_into_parts
+    setup_instance 123
+    assert_equal [100, 20, 3], @rnc.break_number_into_parts
+
+    setup_instance 1
+    assert_equal [1], @rnc.break_number_into_parts
   end
 
 end
