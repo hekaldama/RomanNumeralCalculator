@@ -5,7 +5,8 @@ require 'minitest/unit'
 require 'roman_numeral_calculator'
 
 class RomanNumeralCalculator
-  public :break_number_into_parts
+  public :break_number_into_parts, :convert_roman_to_numeric,
+         :convert_numeric_to_roman
 
   attr_reader :input
 end
@@ -36,6 +37,10 @@ class RomanNumeralCalculatorTest < MiniTest::Unit::TestCase
     assert_raises ArgumentError do
       RomanNumeralCalculator.calculate "2"
     end
+
+    assert_raises ArgumentError do
+      RomanNumeralCalculator.calculate "F"
+    end
   end
 
   def test_init
@@ -49,6 +54,22 @@ class RomanNumeralCalculatorTest < MiniTest::Unit::TestCase
 
     setup_instance 1
     assert_equal [1], @rnc.break_number_into_parts
+
+    setup_instance 22
+    assert_equal [20, 2], @rnc.break_number_into_parts
+  end
+
+  def test_convert_roman_to_numeric
+    setup_instance 'X'
+    assert_equal 10, @rnc.convert_roman_to_numeric
+  end
+
+  def test_convert_numeric_to_roman
+    setup_instance 22
+    assert_equal 'XXII', @rnc.convert_numeric_to_roman
+
+    setup_instance 522
+    assert_equal 'DXXII', @rnc.convert_numeric_to_roman
   end
 
 end

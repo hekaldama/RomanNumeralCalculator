@@ -1,9 +1,13 @@
 class RomanNumeralCalculator
 
   FIXNUM_TO_ROMAN = {
-    1  => 'I',
-    5  => 'V',
-    10 => 'X',
+    1    => 'I',
+    5    => 'V',
+    10   => 'X',
+    50   => 'L',
+    100  => 'C',
+    500  => 'D',
+    1000 => 'M',
   }
 
   ROMAN_TO_FIXNUM = {
@@ -27,8 +31,7 @@ class RomanNumeralCalculator
   def calculate
     raise ArgumentError unless valid_input?
 
-    # convert roman to integer
-    if @input.is_a? String
+    if is_roman?
       convert_roman_to_numeric
     else
       convert_numeric_to_roman
@@ -37,19 +40,31 @@ class RomanNumeralCalculator
 
   private
 
+  # TODO revisit, how is this seeing if it is roman?
+  def is_roman?
+    @input.is_a? String
+  end
+
   def convert_numeric_to_roman
-    ROMAN_TO_FIXNUM.values.reverse.each do |i|
-      val = @input / i
-      next if val == 0
-      a = FIXNUM_TO_ROMAN[i] * val
-      return a
+    output = []
+
+    break_number_into_parts.each do |number|
+      ROMAN_TO_FIXNUM.values.reverse.each do |i|
+        #require 'ruby-debug' ; debugger
+        val = number / i
+        next if val == 0
+        output << FIXNUM_TO_ROMAN[i] * val
+        break
+      end
     end
+
+    output.join
   end
 
   def convert_roman_to_numeric
     total = 0
     @input.each_char do |char|
-      total += ROMAN_TO_FIXNUM[char.downcase]
+      total += ROMAN_TO_FIXNUM[char.downcase] || 0
     end
     total
   end
